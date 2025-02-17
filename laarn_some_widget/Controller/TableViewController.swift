@@ -35,7 +35,7 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
     ]
 
     var originalImageName = [
-        UIImage(named: "Apple"),
+        UIImage(named: "logo"),
         UIImage(named: "Banana"),
         UIImage(named: "Orange"),
         UIImage(named: "Mango"),
@@ -177,7 +177,30 @@ class TableViewController: UIViewController, UITableViewDelegate, UITableViewDat
          self.navigationController?.pushViewController(
              fruitDetails, animated: true)
      }
+    func tableView(
+         _ tableView: UITableView, willDisplay cell: UITableViewCell,
+         forRowAt indexPath: IndexPath
+     ) {
+         cell.alpha = 0
 
+         // Create a 3D rotation transform
+         var transform = CATransform3DIdentity
+         transform = CATransform3DTranslate(transform, -250, 20, 0) // Move slightly
+
+         cell.contentView.layer.transform = transform
+
+         UIView.animate(
+             withDuration: 1.0,
+             delay: 0.01 * Double(indexPath.row),
+             usingSpringWithDamping: 0.7,
+             initialSpringVelocity: 0.5,
+             options: .curveEaseInOut,
+             animations: {
+                 cell.alpha = 1.0
+                 cell.contentView.layer.transform = CATransform3DIdentity
+             }
+         )
+     }
     // MARK: - Table View Swipe to Delete
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (_, _, completionHandler) in
